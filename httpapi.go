@@ -30,10 +30,6 @@ type IncomingMsg struct {
 	Msg            string
 }
 
-type test_struct struct {
-	Test string
-}
-
 func plurkPost(w http.ResponseWriter, req *http.Request) {
 	var in IncomingMsg
 
