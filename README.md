@@ -1,11 +1,11 @@
-bookmark-makerserver: 透過IFTTT可以把Twitter 轉到 bookmark的伺服器 
+bookmark-makerserver:  Using IFTTT to store your Tweet to Github Issue as bookmarks
 ==============
 
  [![GoDoc](https://godoc.org/github.com/kkdai/bookmark-makerserver?status.svg)](https://godoc.org/github.com/kkdai/bookmark-makerserver)  [![Build Status](https://travis-ci.org/kkdai/bookmark-makerserver.svg?branch=master)](https://travis-ci.org/kkdai/bookmark-makerserver)
 
-![](http://ext.pimg.tw/derek2009/4a0e884470b0d.jpg)
+![](images/bookmark.png)
 
-"bookmark Maker Server" 一個 Web Service 可以幫助你使用 [IFTTT](https://ifttt.com) 來將你的 Twitter 轉發到 bookmark
+"bookmark Maker Server" 一個 Web Service 可以幫助你使用 [IFTTT](https://ifttt.com) 來將你的 Twitter 轉發到 Github Issue 作為 Bookmark 
 
 
 如何讓你的 Twitter 轉發到 bookmark ?
@@ -36,14 +36,17 @@ bookmark-makerserver: 透過IFTTT可以把Twitter 轉到 bookmark的伺服器
 - Body: 依照以以下的修改，貼上去
 
 
-```
-// 記得將以下資料換成剛剛在 bookmark 拿到的資料
-// {{App key}}      -> App key
-// {{App secret}}   -> App secret
-// {{Token}}        -> Token
-// {{Token secret}} -> Token secret
+You need get your github token from [https://github.com/settings/tokens](https://github.com/settings/tokens)
 
-{"ConsumerToken":"{{App key}}", "ConsumerSecret":"{{App secret}}", "AccessToken": "{{Token}}","AccessSecret":"{{Token secret}}", "Msg": "{{Text}}"}
+![](images/github_token.png)
+
+```
+{
+"User":"YOUR_GITHUB_USER_NAME", 
+"Repo":"YOUR_GITHUB_REPO_NAME", 
+"GithubToken": "GET_YOUR_GITHUB_TOKEN", 
+"Msg": "{{Text}}"
+}"}
 ``` 
 
 這樣就可以了....
