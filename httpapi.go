@@ -18,19 +18,17 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	plurgo "github.com/kkdai/plurgo/plurkgo"
 )
 
+//IncomingMsg :
 type IncomingMsg struct {
-	ConsumerToken  string
-	ConsumerSecret string
-	AccessToken    string
-	AccessSecret   string
-	Msg            string
+	ConsumerName  string
+	ConsumerRepo  string
+	ConsumerToken string
+	Msg           string
 }
 
-func plurkPost(w http.ResponseWriter, req *http.Request) {
+func bookmarkPost(w http.ResponseWriter, req *http.Request) {
 	var in IncomingMsg
 
 	body, err := ioutil.ReadAll(req.Body)
@@ -47,22 +45,8 @@ func plurkPost(w http.ResponseWriter, req *http.Request) {
 	}
 
 	//Pass parameter
-	var plurkCred plurgo.PlurkCredentials
-	plurkCred.AccessSecret = in.AccessSecret
-	plurkCred.AccessToken = in.AccessToken
-	plurkCred.ConsumerSecret = in.ConsumerSecret
-	plurkCred.ConsumerToken = in.ConsumerToken
-
-	//Access plurk token
-	accessToken, _, err := plurgo.GetAccessToken(&plurkCred)
-	var data = map[string]string{}
-	data["content"] = in.Msg
-	data["qualifier"] = "shares"
-	result, err := plurgo.CallAPI(accessToken, "/APP/Timeline/plurkAdd", data)
-	if err != nil {
-		log.Println("failed: %v ret=%v", err, result)
-		return
-	}
+	bm := NewBookmark(in.ConsumerName, in.ConsumerRepo, in.ConsumerToken)
+	bm.SaveBookmark(in.Msg)
 	log.Println("Plurk post success! Msg=", in.Msg)
 }
 
@@ -75,6 +59,6 @@ func serveHttpAPI(port string, existC chan bool) {
 	}()
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", plurkPost)
+	mux.HandleFunc("/", bookmarkPost)
 	http.ListenAndServe(":"+port, mux)
 }

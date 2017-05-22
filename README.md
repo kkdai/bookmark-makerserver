@@ -11,17 +11,6 @@ bookmark-makerserver: 透過IFTTT可以把Twitter 轉到 bookmark的伺服器
 如何讓你的 Twitter 轉發到 bookmark ?
 =============
 
-### 首先申請一個 bookmark APP
-
-1. 先到這個地方，申請你的 [App](http://www.bookmark.com/bookmarkApp/)．
-	- **類別**:  手機或應用程式
-	- 其他相關資料填寫可以參考[這篇文章](http://zh.blog.bookmark.com/archives/1121)
-2. 點下測試工具
-3. 取得以下四個數值
-	- App key
-	- App secret
-	- Token
-	- Token secret
 
 在bookmark  App就算是完成，接下來要到 [IFTTT](https://ifttt.com)設定
 
