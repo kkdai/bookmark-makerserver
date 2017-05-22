@@ -7,31 +7,32 @@ import (
 	"github.com/google/go-github/github"
 )
 
-//Bookmark :
-type Bookmark struct {
-	Name    string
-	Link    string
-	Comment string
+//BookmarkMgr :
+type BookmarkMgr struct {
+	User   string
+	Repo   string
+	Client *github.Client
 }
 
 //NewBookmark :
-func NewBookmark(link string) *Bookmark {
-	new := new(Bookmark)
+func NewBookmark(client *github.Client, user, repo string) *BookmarkMgr {
+	new := new(BookmarkMgr)
+	new.User = user
+	new.Repo = repo
+	new.Client = client
 	return new
 }
 
 //CheckIfExist :
-func (b *Bookmark) CheckIfExist() bool {
-	client := github.NewClient(nil)
-	// ctx := context.Background()
+func (b *BookmarkMgr) CheckIfExist() bool {
 	var issueByRepoOpts = &github.IssueListByRepoOptions{
 		State:     "state",
 		Direction: "asc",
 	}
 
-	issues, res, err := client.Issues.ListByRepo(
-		"user",
-		"repo",
+	issues, res, err := b.Client.Issues.ListByRepo(
+		b.User,
+		b.Repo,
 		issueByRepoOpts,
 	)
 
@@ -48,6 +49,6 @@ func (b *Bookmark) CheckIfExist() bool {
 }
 
 //SaveBookmark :
-func (b *Bookmark) SaveBookmark() error {
+func (b *BookmarkMgr) SaveBookmark() error {
 	return nil
 }
