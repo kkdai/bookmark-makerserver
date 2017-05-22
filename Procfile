@@ -1,2 +1,2 @@
-web: plurk-makerserver
+web: bookmark-makerserver
 

@@ -22,10 +22,10 @@ import (
 
 //IncomingMsg :
 type IncomingMsg struct {
-	ConsumerName  string
-	ConsumerRepo  string
-	ConsumerToken string
-	Msg           string
+	User        string
+	Repo        string
+	GithubToken string
+	Msg         string
 }
 
 func bookmarkPost(w http.ResponseWriter, req *http.Request) {
@@ -45,9 +45,12 @@ func bookmarkPost(w http.ResponseWriter, req *http.Request) {
 	}
 
 	//Pass parameter
-	bm := NewBookmark(in.ConsumerName, in.ConsumerRepo, in.ConsumerToken)
-	bm.SaveBookmark(in.Msg)
-	log.Println("Plurk post success! Msg=", in.Msg)
+	bm := NewBookmark(in.User, in.Repo, in.GithubToken)
+	err = bm.SaveBookmark(in.Msg)
+	if err != nil {
+		log.Println("err=", err)
+	}
+	log.Println("Github issue post success! Msg=", in.Msg)
 }
 
 func serveHttpAPI(port string, existC chan bool) {

@@ -18,6 +18,12 @@ func TestTweetHashTag(t *testing.T) {
 	message2 := "hello @gernest I would like to @ follow you on twitter"
 	tags2 := mention.GetTags('@', strings.NewReader(message2))
 	fmt.Println(tags2)
+
+	message3 := "hello @gernest I would  * like to #follow #go #ilike "
+	tags3 := mention.GetTags('#', strings.NewReader(message3))
+	content := mention.GetTags('*', strings.NewReader(message3))
+	fmt.Println("tag:", tags3)
+	fmt.Println("body:", content)
 }
 
 func TestStringWebLink(t *testing.T) {
@@ -48,7 +54,7 @@ func TestIssueList(t *testing.T) {
 	user := os.Getenv("User")
 	repo := os.Getenv("Repo")
 
-	testString := "mvdan/xurls: Extract urls from text help you to find link in string in #golang https://github.com/mvdan/xurls"
+	testString := "Facebook开源AI对话研究平台ParlAI ，解决人机对话最常见5类问题 # #curate #feedly  感覺不錯玩，可以玩玩看。 http://36kr.com/p/5075718.html?ktm_source=feed"
 
 	bm := NewBookmark(user, repo, token)
 	err := bm.SaveBookmark(testString)
