@@ -5,40 +5,45 @@ bookmark-makerserver:  Using IFTTT to store your Tweet to Github Issue as bookma
 
 ![](images/bookmark.png)
 
-"bookmark Maker Server" 一個 Web Service 可以幫助你使用 [IFTTT](https://ifttt.com) 來將你的 Twitter 轉發到 Github Issue 作為 Bookmark 
+"Bookmark Maker Server" is a webhook service help you using [IFTTT](https://ifttt.com) to forward your tweet to your github issue as a bookmark.
+
+The detail flow show as follow:
+
+![](images/flow.png)
 
 
-如何讓你的 Twitter 轉發到 bookmark ?
+How to use it?
 =============
 
-
-在bookmark  App就算是完成，接下來要到 [IFTTT](https://ifttt.com)設定
-
-### 再來架設你自己的bookmark Maker Server
-
-按下下面的按鈕
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-記住你的 Server URL 等等要使用
-
-#### 在 IFTTT Maker 上的設定
-
-1. 接下來到 [IFTTT Maker](https://ifttt.com/maker) 申請一個帳號．
-
-2. 建立一個 IFTTT Receipt ， 前端用 Twitter 接起來，後面接到剛剛建立的 Maker ．
-
-3. Maker 設定頁面上，資料依照以下的格式來填:
-
-- URL :  你剛剛的 Server URL
-- Method: POST
-- Content Type: application/json
-- Body: 依照以以下的修改，貼上去
-
+## Request your own github token for authorization
 
 You need get your github token from [https://github.com/settings/tokens](https://github.com/settings/tokens)
 
 ![](images/github_token.png)
+
+
+
+## Duplicate your own makerserver by Heroku
+
+Just press button to deploy your own.
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+
+## How to setup on IFTTT 
+
+1. Request a account on [IFTTT Maker](https://ifttt.com/maker)
+
+2. Create your own IFTTT Applet , using if "tweet by you" than call webmaker
+
+3. In the maker server setup page, using following format.
+
+- URL :  Your heroku app address
+- Method: POST
+- Content Type: application/json
+- Body: Reference follow format
+
+
 
 ```
 {
@@ -49,12 +54,7 @@ You need get your github token from [https://github.com/settings/tokens](https:/
 }"}
 ``` 
 
-這樣就可以了....
-
-
-Inspired By
-=============
-
+That's it.
 
 
 License
