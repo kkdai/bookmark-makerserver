@@ -5,7 +5,7 @@ bookmark-makerserver:  Using IFTTT to store your Tweet to Github Issue as bookma
 
 ![](images/bookmark.png)
 
-"Bookmark Maker Server" is a webhook service help you using [IFTTT](https://ifttt.com) to forward your tweet to your github issue as a bookmark.
+"Bookmark Maker Server" is a webhook service help you using [IFTTT](https://ifttt.com) to forward your tweet to your github issue as a bookmark. Result on [kkdai/bookmarks](https://github.com/kkdai/bookmarks), feel free to take a loook.
 
 The detail flow show as follow:
 
@@ -14,6 +14,8 @@ The detail flow show as follow:
 
 How to use it?
 =============
+
+Here is the step, how to use this without writing any code.
 
 ## Request your own github token for authorization
 
