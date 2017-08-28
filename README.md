@@ -4,7 +4,7 @@
 
 ![](images/bookmark.png)
 
-"Bookmark Maker Server" is a webhook service help you using [IFTTT](https://ifttt.com) to forward your tweet to your github issue as a bookmark. Result on [kkdai/bookmarks](https://github.com/kkdai/bookmarks), feel free to take a loook.
+"Bookmark Maker Server" is a webhook service help you using [IFTTT](https://ifttt.com) to forward your tweet to your github issue as a bookmark. Result on [kkdai/bookmarks](https://github.com/kkdai/bookmarks), feel free to take a look.
 
 The detail flow show as follow:
 
@@ -34,7 +34,7 @@ Just press button to deploy your own.
 
 1. Request a account on [IFTTT Maker](https://ifttt.com/maker)
 
-2. Create your own IFTTT Applet , using if "tweet by you" than call webmaker
+2. Create your own IFTTT Applet , using if "tweet by you" then call webmaker
 
 3. In the maker server setup page, using following format.
 
