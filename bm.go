@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/gernest/mention"
@@ -70,7 +71,12 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 		commentBody = strings.TrimLeft(commentBody, " ")
 	}
 
-	//Prepare links
+	//Prepare links, if no link just not post to github issue
+	if len(links) == 0 {
+		log.Println("Skip post:", tweet)
+		return nil
+	}
+
 	for _, v := range links {
 		body = fmt.Sprintf("%s [link](%s)", body, v)
 	}
