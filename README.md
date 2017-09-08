@@ -1,19 +1,17 @@
-bookmark-makerserver:  Using IFTTT to store your Tweet to Github Issue as bookmarks
-==============
+# bookmark-makerserver:  Using IFTTT to store your Tweet to Github Issue as bookmarks
 
  [![GoDoc](https://godoc.org/github.com/kkdai/bookmark-makerserver?status.svg)](https://godoc.org/github.com/kkdai/bookmark-makerserver)  [![Build Status](https://travis-ci.org/kkdai/bookmark-makerserver.svg?branch=master)](https://travis-ci.org/kkdai/bookmark-makerserver)
 
 ![](images/bookmark.png)
 
-"Bookmark Maker Server" is a webhook service help you using [IFTTT](https://ifttt.com) to forward your tweet to your github issue as a bookmark. Result on [kkdai/bookmarks](https://github.com/kkdai/bookmarks), feel free to take a loook.
+"Bookmark Maker Server" is a webhook service help you using [IFTTT](https://ifttt.com) to forward your tweet to your github issue as a bookmark. Result on [kkdai/bookmarks](https://github.com/kkdai/bookmarks), feel free to take a look.
 
 The detail flow show as follow:
 
 ![](images/flow.png)
 
 
-How to use it?
-=============
+# How to use it?
 
 Here is the step, how to use this without writing any code.
 
@@ -36,7 +34,7 @@ Just press button to deploy your own.
 
 1. Request a account on [IFTTT Maker](https://ifttt.com/maker)
 
-2. Create your own IFTTT Applet , using if "tweet by you" than call webmaker
+2. Create your own IFTTT Applet , using if "tweet by you" then call webmaker
 
 3. In the maker server setup page, using following format.
 
@@ -45,19 +43,16 @@ Just press button to deploy your own.
 - Content Type: application/json
 - Body: Reference follow format
 
-
-
-```
+```json
 {
-"User":"YOUR_GITHUB_USER_NAME", 
-"Repo":"YOUR_GITHUB_REPO_NAME", 
-"GithubToken": "GET_YOUR_GITHUB_TOKEN", 
-"Msg": "{{Text}}"
-}"}
+  "User":"YOUR_GITHUB_USER_NAME", 
+  "Repo":"YOUR_GITHUB_REPO_NAME", 
+  "GithubToken": "GET_YOUR_GITHUB_TOKEN", 
+  "Msg": "{{Text}}"
+}
 ``` 
 
 That's it.
-
 
 License
 ---------------
