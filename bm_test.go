@@ -54,7 +54,8 @@ func TestIssueList(t *testing.T) {
 	user := os.Getenv("User")
 	repo := os.Getenv("Repo")
 
-	testString := "Facebook开源AI对话研究平台ParlAI ，解决人机对话最常见5类问题 # #curate #feedly  感覺不錯玩，可以玩玩看。 http://36kr.com/p/5075718.html?ktm_source=feed"
+	t.Log(token, user, repo)
+	testString := "Stateless datacenter load-balancing with Beamer | the morning paper https://t.co/0GFghfriwB"
 
 	bm := NewBookmark(user, repo, token)
 	err := bm.SaveBookmark(testString)

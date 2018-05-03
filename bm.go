@@ -87,6 +87,9 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 	}
 
 	// Push to github issue
+	if tags == nil {
+		tags = []string{}
+	}
 	input := &github.IssueRequest{
 		Title:    String(title),
 		Body:     String(body),
