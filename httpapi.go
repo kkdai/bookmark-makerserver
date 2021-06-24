@@ -40,6 +40,13 @@ func bookmarkPost(w http.ResponseWriter, req *http.Request) {
 	err = json.Unmarshal(body, &in)
 	log.Println("Get request:", in)
 	if err != nil {
+		for name, values := range req.Header {
+			// Loop over all values for the name.
+			for _, value := range values {
+				log.Println(name, value)
+			}
+		}
+
 		log.Println("json unmarkshal error:", err, " body:", string(body))
 		return
 	}
