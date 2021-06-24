@@ -22,10 +22,10 @@ import (
 
 //IncomingMsg :
 type IncomingMsg struct {
-	User        string
-	Repo        string
-	GithubToken string
-	Msg         string
+	User        string `json:"User"`
+	Repo        string `json:"Repo"`
+	GithubToken string `json:"GithubToken"`
+	Msg         string `json:"Msg"`
 }
 
 func bookmarkPost(w http.ResponseWriter, req *http.Request) {
@@ -40,7 +40,7 @@ func bookmarkPost(w http.ResponseWriter, req *http.Request) {
 	err = json.Unmarshal(body, &in)
 	log.Println("Get request:", in)
 	if err != nil {
-		log.Println("json unmarkshal error:", err)
+		log.Println("json unmarkshal error:", err, " body:", string(body))
 		return
 	}
 
