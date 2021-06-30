@@ -1,6 +1,7 @@
 # bookmark-makerserver:  Using IFTTT to store your Tweet to Github Issue as bookmarks
 
- [![GoDoc](https://godoc.org/github.com/kkdai/bookmark-makerserver?status.svg)](https://godoc.org/github.com/kkdai/bookmark-makerserver)  [![Build Status](https://travis-ci.org/kkdai/bookmark-makerserver.svg?branch=master)](https://travis-ci.org/kkdai/bookmark-makerserver)
+ [![GoDoc](https://godoc.org/github.com/kkdai/bookmark-makerserver?status.svg)](https://godoc.org/github.com/kkdai/bookmark-makerserver)  
+ [![Go](https://github.com/kkdai/bookmark-makerserver/actions/workflows/go.yml/badge.svg)](https://github.com/kkdai/bookmark-makerserver/actions/workflows/go.yml)
 
 ![](images/bookmark.png)
 
