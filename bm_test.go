@@ -54,6 +54,11 @@ func TestIssueList(t *testing.T) {
 	user := os.Getenv("User")
 	repo := os.Getenv("Repo")
 
+	if len(token) == 0 {
+		t.Skip("no token")
+		return
+	}
+
 	t.Log(token, user, repo)
 	testString := "Stateless datacenter load-balancing with Beamer | the morning paper https://t.co/0GFghfriwB"
 
