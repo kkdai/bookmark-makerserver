@@ -1,6 +1,6 @@
 module github.com/kkdai/bookmark-makerserver
 
-go 1.21.2
+go 1.18
 
 require (
 	github.com/gernest/mention v0.0.0-20170522084958-cef3e3edded2
