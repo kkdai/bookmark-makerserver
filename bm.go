@@ -7,21 +7,21 @@ import (
 	"strings"
 
 	"github.com/gernest/mention"
-	"github.com/google/go-github/v35/github"
+	"github.com/google/go-github/v57/github"
 	"github.com/mvdan/xurls"
 	"golang.org/x/oauth2"
 )
 
 func String(v string) *string { return &v }
 
-//BookmarkMgr :
+// BookmarkMgr :
 type BookmarkMgr struct {
 	Token string
 	User  string
 	Repo  string
 }
 
-//NewBookmark :
+// NewBookmark :
 func NewBookmark(user, repo, token string) *BookmarkMgr {
 	new := new(BookmarkMgr)
 	new.User = user
@@ -30,12 +30,12 @@ func NewBookmark(user, repo, token string) *BookmarkMgr {
 	return new
 }
 
-//CheckIfExist :
+// CheckIfExist :
 func (b *BookmarkMgr) CheckIfExist() bool {
 	return false
 }
 
-//SaveBookmark :
+// SaveBookmark :
 func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
