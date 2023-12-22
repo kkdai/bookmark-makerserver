@@ -12,95 +12,73 @@ import (
 	"golang.org/x/oauth2"
 )
 
-func String(v string) *string { return &v }
-
-// BookmarkMgr :
+// BookmarkMgr manages bookmarks for a GitHub repository.
 type BookmarkMgr struct {
 	Token string
 	User  string
 	Repo  string
 }
 
-// NewBookmark :
+// NewBookmark creates a new BookmarkMgr instance.
 func NewBookmark(user, repo, token string) *BookmarkMgr {
-	new := new(BookmarkMgr)
-	new.User = user
-	new.Repo = repo
-	new.Token = token
-	return new
+	return &BookmarkMgr{
+		User:  user,
+		Repo:  repo,
+		Token: token,
+	}
 }
 
-// CheckIfExist :
-func (b *BookmarkMgr) CheckIfExist() bool {
-	return false
-}
-
-// SaveBookmark :
+// SaveBookmark saves a bookmark as a GitHub issue.
 func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 	ctx := context.Background()
-	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: b.Token},
-	)
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: b.Token})
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
 	links := xurls.Relaxed.FindAllString(tweet, -1)
 	tags := mention.GetTags('#', strings.NewReader(tweet))
-	title := fmt.Sprintf("%s", tweet)
+	title := tweet
 
-	var body string
-	var commentBody string
-	strTs := strings.SplitN(tweet, "#", 2)
-
-	if len(strTs) >= 2 {
-		title = strTs[0]
-		commentBody = strTs[1]
+	if strings.Contains(tweet, "#") {
+		title = strings.SplitN(tweet, "#", 2)[0]
 	}
 
-	//To get pure comment, we need remove links and tags
-	if commentBody != "" {
-		for _, v := range links {
-			commentBody = strings.Replace(commentBody, v, "", -1)
-		}
-
-		for _, v := range tags {
-			commentBody = strings.Replace(commentBody, v, "", -1)
-		}
-
-		commentBody = strings.Replace(commentBody, "#", "", -1)
-		commentBody = strings.TrimLeft(commentBody, " ")
+	// Prepare the body of the issue by removing links and tags from the comment.
+	commentBody := strings.Replace(tweet, title, "", 1)
+	for _, v := range links {
+		commentBody = strings.Replace(commentBody, v, "", -1)
 	}
+	for _, v := range tags {
+		commentBody = strings.Replace(commentBody, v, "", -1)
+	}
+	commentBody = strings.TrimSpace(strings.Replace(commentBody, "#", "", -1))
 
-	//Prepare links, if no link just not post to github issue
+	// If no link is present, skip posting to GitHub.
 	if len(links) == 0 {
-		log.Println("Skip post:", tweet)
+		log.Printf("Skip post: %s", tweet)
 		return nil
 	}
 
-	for _, v := range links {
-		body = fmt.Sprintf("%s [link](%s)", body, v)
+	var bodyBuilder strings.Builder
+	for _, link := range links {
+		bodyBuilder.WriteString(fmt.Sprintf(" [link](%s)", link))
 	}
-
-	//Add comment after links
 	if commentBody != "" {
-		body = fmt.Sprintf("%s \n %s", body, commentBody)
+		bodyBuilder.WriteString(fmt.Sprintf("\n%s", commentBody))
 	}
 
-	// Push to github issue
-	if tags == nil {
-		tags = []string{}
-	}
+	// Create a GitHub issue.
 	input := &github.IssueRequest{
-		Title:    String(title),
-		Body:     String(body),
-		Assignee: String(""),
-		Labels:   &tags,
+		Title:  &title,
+		Body:   github.String(bodyBuilder.String()),
+		Labels: &tags,
 	}
 
 	_, _, err := client.Issues.Create(ctx, b.User, b.Repo, input)
 	if err != nil {
-		fmt.Printf("Issues.Create returned error: %v", err)
+		log.Printf("Issues.Create returned error: %v", err)
 		return err
 	}
+
 	return nil
 }
