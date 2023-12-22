@@ -14,13 +14,13 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
 )
 
-//IncomingMsg :
+// IncomingMsg :
 type IncomingMsg struct {
 	User        string `json:"User"`
 	Repo        string `json:"Repo"`
@@ -31,7 +31,7 @@ type IncomingMsg struct {
 func bookmarkPost(w http.ResponseWriter, req *http.Request) {
 	var in IncomingMsg
 
-	body, err := ioutil.ReadAll(req.Body)
+	body, err := io.ReadAll(req.Body)
 	if err != nil {
 		log.Println("Data read error:", err)
 		return
