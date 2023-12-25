@@ -11,7 +11,6 @@ The detail flow show as follow:
 
 ![](images/flow.png)
 
-
 # How to use it?
 
 Here is the step, how to use this without writing any code.
@@ -22,16 +21,13 @@ You need get your github token from [https://github.com/settings/tokens](https:/
 
 ![](images/github_token.png)
 
-
-
 ## Duplicate your own makerserver by Heroku
 
 Just press button to deploy your own.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-
-## How to setup on IFTTT 
+## How to setup on IFTTT
 
 1. Request a account on [IFTTT Maker](https://ifttt.com/maker)
 
@@ -48,10 +44,9 @@ Just press button to deploy your own.
 {
   "User":"YOUR_GITHUB_USER_NAME", 
   "Repo":"YOUR_GITHUB_REPO_NAME", 
-  "GithubToken": "GET_YOUR_GITHUB_TOKEN", 
   "Msg": "{{Text}}"
 }
-``` 
+```
 
 That's it.
 
@@ -62,11 +57,10 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-

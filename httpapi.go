@@ -22,10 +22,9 @@ import (
 
 // IncomingMsg :
 type IncomingMsg struct {
-	User        string `json:"User"`
-	Repo        string `json:"Repo"`
-	GithubToken string `json:"GithubToken"`
-	Msg         string `json:"Msg"`
+	User string `json:"User"`
+	Repo string `json:"Repo"`
+	Msg  string `json:"Msg"`
 }
 
 func bookmarkPost(w http.ResponseWriter, req *http.Request) {
@@ -52,7 +51,9 @@ func bookmarkPost(w http.ResponseWriter, req *http.Request) {
 	}
 
 	//Pass parameter
-	bm := NewBookmark(in.User, in.Repo, in.GithubToken)
+	githubToken := os.Getenv("GITHUB_TOKEN")
+
+	bm := NewBookmark(in.User, in.Repo, githubToken)
 	err = bm.SaveBookmark(in.Msg)
 	if err != nil {
 		log.Println("err=", err)
