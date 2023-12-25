@@ -14,5 +14,10 @@
     {
       "url": "heroku/go"
     }
-  ]
-}
+  ],
+  "env": {
+    "GITHUB_TOKEN": {
+      "description": "Github token for access your repo",
+      "required": true
+    },
+  }
