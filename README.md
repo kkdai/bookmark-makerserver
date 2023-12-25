@@ -48,6 +48,10 @@ Just press button to deploy your own.
 }
 ```
 
+4. Add Environment variable in your HEROKU setting.
+
+- `GITHUB_TOKEN` : YOUR_TOKEN
+
 That's it.
 
 License
