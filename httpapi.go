@@ -13,6 +13,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"io"
 	"log"
@@ -35,6 +36,9 @@ func bookmarkPost(w http.ResponseWriter, req *http.Request) {
 		log.Println("Data read error:", err)
 		return
 	}
+	// Replace newline characters with escaped version
+	body = bytes.ReplaceAll(body, []byte("\n"), []byte("\\n"))
+
 	log.Println("Body:", string(body))
 	err = json.Unmarshal(body, &in)
 	log.Println("Get request:", in)
