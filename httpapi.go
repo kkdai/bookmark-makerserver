@@ -35,11 +35,9 @@ func bookmarkPost(w http.ResponseWriter, req *http.Request) {
 		log.Println("Data read error:", err)
 		return
 	}
+	defer req.Body.Close()
 
-	log.Println("Body:", string(body))
-
-	// Replace newline characters with escaped version
-	log.Println("Body:", string(body))
+	log.Println("Body:\n" + string(body) + "\n")
 
 	if err = json.Unmarshal(body, &in); err != nil {
 		log.Println("json unmarkshal error:", err, " \nbody:", string(body))
