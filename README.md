@@ -44,7 +44,7 @@ Just press button to deploy your own.
 {
   "User":"YOUR_GITHUB_USER_NAME", 
   "Repo":"YOUR_GITHUB_REPO_NAME", 
-  "Msg": "{{Text}}"
+  "Msg": "<<<{{Text}}>>>"
 }
 ```
 
