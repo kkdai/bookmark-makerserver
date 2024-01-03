@@ -67,6 +67,11 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 		bodyBuilder.WriteString(fmt.Sprintf("\n%s", commentBody))
 	}
 
+	// Check tags if nil, apply default tag with #twitter hashtag.
+	if len(tags) == 0 {
+		tags = []string{"twitter"}
+	}
+
 	// Create a GitHub issue.
 	input := &github.IssueRequest{
 		Title:  &title,
