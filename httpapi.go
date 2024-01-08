@@ -29,8 +29,8 @@ type IncomingMsg struct {
 	NumOfDay string `json:"NumOfDay"`
 }
 
-// PostToBlog : post to blog
-func PostToBlog(w http.ResponseWriter, req *http.Request) {
+// postToBlog : post to blog
+func postToBlog(w http.ResponseWriter, req *http.Request) {
 	var in IncomingMsg
 
 	body, err := io.ReadAll(req.Body)
@@ -121,6 +121,6 @@ func serveHttpAPI(port string, existC chan bool) {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/bm", bookmarkPost)
-	mux.HandleFunc("/blog", bookmarkPost)
+	mux.HandleFunc("/blog", postToBlog)
 	http.ListenAndServe(":"+port, mux)
 }
