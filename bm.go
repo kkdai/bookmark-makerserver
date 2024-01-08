@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/gernest/mention"
 	"github.com/google/go-github/v57/github"
@@ -86,4 +87,54 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 	}
 
 	return nil
+}
+
+// PostToBlog finds all GitHub issues within the latest numOfDay days and returns their titles and comments.
+func (b *BookmarkMgr) PostToBlog(numOfDay string) ([]*github.Issue, error) {
+	ctx := context.Background()
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: b.Token})
+	tc := oauth2.NewClient(ctx, ts)
+	client := github.NewClient(tc)
+
+	// Parse the numOfDay string to an integer
+	days, err := time.ParseDuration(numOfDay + "d")
+	if err != nil {
+		log.Printf("Error parsing number of days: %v", err)
+		return nil, err
+	}
+
+	// Calculate the time for the start of the search window
+	since := time.Now().Add(-days)
+
+	// List all issues for the repository since the calculated time
+	opts := &github.IssueListByRepoOptions{
+		Since:       since,
+		State:       "all",
+		ListOptions: github.ListOptions{PerPage: 100},
+	}
+
+	// Retrieve issues
+	var allIssues []*github.Issue
+	for {
+		issues, resp, err := client.Issues.ListByRepo(ctx, b.User, b.Repo, opts)
+		if err != nil {
+			log.Printf("Issues.ListByRepo returned error: %v", err)
+			return nil, err
+		}
+		allIssues = append(allIssues, issues...)
+		if resp.NextPage == 0 {
+			break
+		}
+		opts.Page = resp.NextPage
+	}
+
+	// Create a slice to hold the titles and comments of the issues
+	var issueDetails []*github.Issue
+
+	// Loop through the issues and add their titles and comments to the slice
+	for _, issue := range allIssues {
+		issueDetails = append(issueDetails, issue)
+	}
+
+	return issueDetails, nil
 }
