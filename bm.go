@@ -89,27 +89,23 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 	return nil
 }
 
-// PostToBlog finds all GitHub issues within the latest numOfDay days and returns their titles and comments.
-func (b *BookmarkMgr) PostToBlog(numOfDay string) ([]*github.Issue, error) {
+// PostToBlog finds all GitHub issues since the provided time without the "archived" label.
+// If modifyLabels is true, it adds the "archived" label to them.
+// It returns their titles and comments.
+func (b *BookmarkMgr) PostToBlog(since time.Time, modifyLabels bool) ([]*github.Issue, error) {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: b.Token})
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
-	// Parse the numOfDay string to an integer
-	days, err := time.ParseDuration(numOfDay + "d")
-	if err != nil {
-		log.Printf("Error parsing number of days: %v", err)
-		return nil, err
-	}
+	// Define the label to be excluded and potentially added
+	labelToExclude := "archived"
 
-	// Calculate the time for the start of the search window
-	since := time.Now().Add(-days)
-
-	// List all issues for the repository since the calculated time
+	// List all issues for the repository since the provided time, not closed, and without the "archived" label.
 	opts := &github.IssueListByRepoOptions{
-		Since:       since,
-		State:       "all",
+		Since: since,
+		State: "open",
+		// Labels:      []string{"-" + labelToExclude},
 		ListOptions: github.ListOptions{PerPage: 100},
 	}
 
@@ -128,13 +124,21 @@ func (b *BookmarkMgr) PostToBlog(numOfDay string) ([]*github.Issue, error) {
 		opts.Page = resp.NextPage
 	}
 
-	// Create a slice to hold the titles and comments of the issues
-	var issueDetails []*github.Issue
-
-	// Loop through the issues and add their titles and comments to the slice
-	for _, issue := range allIssues {
-		issueDetails = append(issueDetails, issue)
+	// Loop through the issues and add the "archived" label if modifyLabels is true.
+	if modifyLabels {
+		for _, issue := range allIssues {
+			// Add the "archived" label to the issue
+			_, _, err := client.Issues.AddLabelsToIssue(ctx, b.User, b.Repo, *issue.Number, []string{labelToExclude})
+			if err != nil {
+				log.Printf("Failed to add 'archived' label to issue #%d: %v", *issue.Number, err)
+				// Decide if you want to return an error or just log it
+				// return nil, err
+			} else {
+				log.Printf("Added 'archived' label to issue #%d successfully", *issue.Number)
+			}
+		}
 	}
 
-	return issueDetails, nil
+	// Return all retrieved issues, regardless of whether labels were modified.
+	return allIssues, nil
 }
