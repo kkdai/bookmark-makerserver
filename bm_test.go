@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/gernest/mention"
 	"github.com/mvdan/xurls"
@@ -85,19 +86,18 @@ func TestPostToBlog(t *testing.T) {
 	bm := NewBookmark(user, repo, token)
 
 	// Call the PostToBlog function with a number of days.
-	issues, err := bm.PostToBlog("7") // Check the last 7 days.
+	sinceTime := time.Now().Add(-3 * 24 * time.Hour) // Example: 3 days ago
+	shouldModifyLabels := false                      // Set to false if you do not want to modify labels
+	issues, err := bm.PostToBlog(sinceTime, shouldModifyLabels)
 	if err != nil {
-		t.Errorf("PostToBlog returned an error: %v", err)
+		// handle error
+		t.Error(err)
 	}
-
-	// Check if the issues slice is not nil.
-	if issues == nil {
-		t.Error("Expected a non-nil slice of issues, got nil")
-	}
-
+	// process issues
 	// Here you could add more assertions, such as checking if the issues are within the last 7 days.
 	for _, issue := range issues {
-		fmt.Println("Title: ", issue.Title, " issue time:", issue.CreatedAt)
+		fmt.Println("Title: ", *issue.Title, " issue time:", issue.CreatedAt)
 		fmt.Printf("Body: %s\n\n", *issue.Body)
+		fmt.Println("issue link:", issue.GetHTMLURL())
 	}
 }

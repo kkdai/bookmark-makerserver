@@ -23,10 +23,10 @@ import (
 
 // IncomingMsg :
 type IncomingMsg struct {
-	User     string `json:"User"`
-	Repo     string `json:"Repo"`
-	Msg      string `json:"Msg"`
-	NumOfDay string `json:"NumOfDay"`
+	User      string `json:"User"`
+	Repo      string `json:"Repo"`
+	Msg       string `json:"Msg"`
+	CreatedAt string `json:"CreatedAt"` //"January 02, 2006 at 03:04PM"
 }
 
 // postToBlog : post to blog
@@ -58,9 +58,15 @@ func postToBlog(w http.ResponseWriter, req *http.Request) {
 
 	//Pass parameter
 	githubToken := os.Getenv("GITHUB_TOKEN")
-
 	bm := NewBookmark(in.User, in.Repo, githubToken)
-	issues, err := bm.PostToBlog(in.NumOfDay)
+	createTime, err := ParseDateTime(in.CreatedAt)
+	if err != nil {
+		log.Println("err=", err)
+	}
+
+	//Post to blog since 7 days ago
+	since := DaysBefore(createTime, 7)
+	issues, err := bm.PostToBlog(since, true)
 	if err != nil {
 		log.Println("err=", err)
 	}
