@@ -21,6 +21,8 @@ import (
 	"os"
 )
 
+var geminiKey string
+
 // IncomingMsg :
 type IncomingMsg struct {
 	User      string `json:"User"`
@@ -107,6 +109,7 @@ func bookmarkPost(w http.ResponseWriter, req *http.Request) {
 
 	//Pass parameter
 	githubToken := os.Getenv("GITHUB_TOKEN")
+	geminiKey = os.Getenv("GOOGLE_GEMINI_API_KEY")
 
 	bm := NewBookmark(in.User, in.Repo, githubToken)
 	err = bm.SaveBookmark(in.Msg)

@@ -2,16 +2,20 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
 	"log"
-	"strings"
 	"time"
 
-	"github.com/gernest/mention"
 	"github.com/google/go-github/v57/github"
-	"github.com/mvdan/xurls"
 	"golang.org/x/oauth2"
 )
+
+type ResponseJson struct {
+	Summary     string   `json:"summary"`
+	FullContent string   `json:"full_content"`
+	URL         string   `json:"url"`
+	Tags        []string `json:"tags"`
+}
 
 // BookmarkMgr manages bookmarks for a GitHub repository.
 type BookmarkMgr struct {
@@ -36,51 +40,33 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
-	links := xurls.Relaxed.FindAllString(tweet, -1)
-	tags := mention.GetTags('#', strings.NewReader(tweet))
-	title := tweet
+	//Promot
+	prompt := "根據這份資料，將它擷取出有用資料如下 summary, full_content, url, tags 給我 json ，其中 url 要從 msg 裡面擷取出來,  tags 除了資料中外，根據內容也整理出相關 tags ----"
 
-	if strings.Contains(tweet, "#") {
-		title = strings.SplitN(tweet, "#", 2)[0]
-	}
+	// Using Gemini
+	ret := GeminiChatComplete(prompt + tweet)
+	log.Println("ret:", ret)
 
-	// Prepare the body of the issue by removing links and tags from the comment.
-	commentBody := strings.Replace(tweet, title, "", 1)
-	for _, v := range links {
-		commentBody = strings.Replace(commentBody, v, "", -1)
-	}
-	for _, v := range tags {
-		commentBody = strings.Replace(commentBody, v, "", -1)
-	}
-	commentBody = strings.TrimSpace(strings.Replace(commentBody, "#", "", -1))
+	// Remove first and last line,	which are the backticks.
+	jsonData := removeFirstAndLastLine(ret)
+	log.Println("jsonData:", jsonData)
 
-	// If no link is present, skip posting to GitHub.
-	if len(links) == 0 {
-		log.Printf("Skip post: %s", tweet)
-		return nil
+	// Parse json and insert NotionDB
+	var res ResponseJson
+	err := json.Unmarshal([]byte(jsonData), &res)
+	if err != nil {
+		log.Println("Error parsing JSON:", err)
 	}
-
-	var bodyBuilder strings.Builder
-	for _, link := range links {
-		bodyBuilder.WriteString(fmt.Sprintf(" [link](%s)", link))
-	}
-	if commentBody != "" {
-		bodyBuilder.WriteString(fmt.Sprintf("\n%s", commentBody))
-	}
-
-	// Check tags if nil, apply default tag with #twitter hashtag.
-	if len(tags) == 0 {
-		tags = []string{"twitter"}
-	}
+	log.Println(res)
 
 	// Create a GitHub issue.
 	input := &github.IssueRequest{
-		Title:  &title,
-		Body:   github.String(bodyBuilder.String()),
-		Labels: &tags,
+		Title:  &res.Summary,
+		Body:   github.String(jsonData),
+		Labels: &res.Tags,
 	}
 
-	_, _, err := client.Issues.Create(ctx, b.User, b.Repo, input)
+	_, _, err = client.Issues.Create(ctx, b.User, b.Repo, input)
 	if err != nil {
 		log.Printf("Issues.Create returned error: %v", err)
 		return err
