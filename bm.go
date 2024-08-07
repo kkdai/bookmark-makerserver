@@ -59,6 +59,23 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 	}
 	log.Println(res)
 
+	// if res.url is not empty, scrape the url
+	if res.URL != "" {
+		// Scrape the URL
+		webRet, err := scrapeURL(res.URL)
+		if err != nil {
+			log.Println("Error scraping URL:", err)
+		}
+		//Promot
+		prompt := "Summary the markdown content and metadata from the URL, and return data as following: 原本通點是什麼？ 本篇文章的創新? 未來發展方向? reply in zh-TW ----"
+
+		// Using Gemini
+		ret := GeminiChatComplete(prompt + "title=" + webRet.Data.Metadata.Title + "\n" + webRet.Data.Markdown)
+		log.Println("ScapeRet:", ret)
+
+		res.Summary = ret
+	}
+
 	// Create a GitHub issue.
 	input := &github.IssueRequest{
 		Title:  &res.Summary,

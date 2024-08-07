@@ -17,7 +17,7 @@ func GeminiChatComplete(req string) string {
 		log.Fatal(err)
 	}
 	defer client.Close()
-	model := client.GenerativeModel("gemini-pro")
+	model := client.GenerativeModel("gemini-1.5-flash")
 	value := float32(0.8)
 	model.Temperature = &value
 	cs := model.StartChat()
