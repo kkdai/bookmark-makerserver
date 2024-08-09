@@ -77,10 +77,15 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 		jsonData = string(jsonByte)
 	}
 
+	// Change json raw data into markdown to write into github issue.
+	prompt_mk := "把以下 JSON 資料改成 markdown"
+	mkData := GeminiChatComplete(prompt_mk+jsonData, false)
+	log.Println("Markdown Data:", mkData)
+
 	// Create a GitHub issue.
 	input := &github.IssueRequest{
 		Title:  &res.Summary,
-		Body:   github.String(jsonData),
+		Body:   github.String(mkData),
 		Labels: &res.Tags,
 	}
 
