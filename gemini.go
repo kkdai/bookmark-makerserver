@@ -10,7 +10,7 @@ import (
 )
 
 // Gemini Chat Complete: Iput a prompt and get the response string.
-func GeminiChatComplete(req string) string {
+func GeminiChatComplete(req string, useJson bool) string {
 	ctx := context.Background()
 	client, err := genai.NewClient(ctx, option.WithAPIKey(geminiKey))
 	if err != nil {
@@ -20,6 +20,9 @@ func GeminiChatComplete(req string) string {
 	model := client.GenerativeModel("gemini-1.5-flash")
 	value := float32(0.8)
 	model.Temperature = &value
+	if useJson {
+		model.ResponseMIMEType = "application/json"
+	}
 	cs := model.StartChat()
 
 	send := func(msg string) *genai.GenerateContentResponse {

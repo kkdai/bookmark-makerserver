@@ -44,11 +44,10 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 	prompt := "根據這份資料，將它擷取出有用資料如下 summary, full_content, url, tags 給我 json ，其中 url 要從 msg 裡面擷取出來,  tags 除了資料中外，根據內容也整理出相關 tags ----"
 
 	// Using Gemini
-	ret := GeminiChatComplete(prompt + tweet)
-	log.Println("ret:", ret)
+	jsonData := GeminiChatComplete(prompt+tweet, true)
+	log.Println("ret:", jsonData)
 
 	// Remove first and last line,	which are the backticks.
-	jsonData := removeFirstAndLastLine(ret)
 	log.Println("jsonData:", jsonData)
 
 	// Parse json and insert github issue.
@@ -70,7 +69,7 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 		prompt := "Summary the markdown content and metadata from the URL, and return data as following: 原本通點是什麼？ 本篇文章的創新? 未來發展方向? reply in zh-TW ----"
 
 		// Using Gemini
-		ret := GeminiChatComplete(prompt + "title=" + webRet.Data.Metadata.Title + "\n" + webRet.Data.Markdown)
+		ret := GeminiChatComplete(prompt+"title="+webRet.Data.Metadata.Title+"\n"+webRet.Data.Markdown, false)
 		log.Println("ScapeRet:", ret)
 
 		res.FullContent = ret
