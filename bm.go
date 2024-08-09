@@ -51,7 +51,7 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 	jsonData := removeFirstAndLastLine(ret)
 	log.Println("jsonData:", jsonData)
 
-	// Parse json and insert NotionDB
+	// Parse json and insert github issue.
 	var res ResponseJson
 	err := json.Unmarshal([]byte(jsonData), &res)
 	if err != nil {
@@ -73,7 +73,8 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 		ret := GeminiChatComplete(prompt + "title=" + webRet.Data.Metadata.Title + "\n" + webRet.Data.Markdown)
 		log.Println("ScapeRet:", ret)
 
-		res.Summary = ret
+		res.FullContent = ret
+		jsonData, _ = json.Marshal(res)
 	}
 
 	// Create a GitHub issue.
