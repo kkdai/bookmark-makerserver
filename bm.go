@@ -74,7 +74,8 @@ func (b *BookmarkMgr) SaveBookmark(tweet string) error {
 		log.Println("ScapeRet:", ret)
 
 		res.FullContent = ret
-		jsonData, _ = json.Marshal(res)
+		jsonByte, _ := json.Marshal(res)
+		jsonData = string(jsonByte)
 	}
 
 	// Create a GitHub issue.
