@@ -96,8 +96,32 @@ func TestPostToBlog(t *testing.T) {
 	// process issues
 	// Here you could add more assertions, such as checking if the issues are within the last 7 days.
 	for _, issue := range issues {
-		fmt.Println("Title: ", *issue.Title, " issue time:", issue.CreatedAt)
-		fmt.Printf("Body: %s\n\n", *issue.Body)
-		fmt.Println("issue link:", issue.GetHTMLURL())
+		t.Log("Title: ", *issue.Title, " issue time:", issue.CreatedAt)
+		t.Log("Body:", *issue.Body)
+		t.Log("issue link:", issue.GetHTMLURL())
 	}
+}
+
+// TestScrapeURL tests the scrapeURL function with a real API call.
+func TestScrapeURL(t *testing.T) {
+	// Load environment variables.
+	fc_token := os.Getenv("FC_AUTH_TOKEN")
+	if fc_token == "" {
+		t.Skip("Skipping test because FC_AUTH_TOKEN is not set")
+	}
+
+	// Set up the URL to scrape.
+	url := "https://developers.googleblog.com/en/gemini-15-flash-updates-google-ai-studio-gemini-api/"
+
+	// Call the scrapeURL function.
+	resp, err := scrapeURL(url)
+	if err != nil {
+		t.Error(err)
+	}
+
+	// Print the response.
+	t.Log("Title:", resp.Data.Metadata.Title)
+	t.Log("Description:", resp.Data.Metadata.Description)
+	t.Log("Source URL:", resp.Data.Metadata.SourceURL)
+	t.Log("Content:", resp.Data.Content)
 }
