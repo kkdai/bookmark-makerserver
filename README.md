@@ -51,6 +51,8 @@ Just press button to deploy your own.
 4. Add Environment variable in your HEROKU setting.
 
 - `GITHUB_TOKEN` : YOUR_TOKEN
+- `GOOGLE_GEMINI_API_KEY` : YOUR_Gemini_API_Key
+- `FC_AUTH_TOKEN` : firecrawl API Key to craw web detail.
 
 That's it.
 
