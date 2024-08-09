@@ -24,7 +24,7 @@ func TestTweetHashTag(t *testing.T) {
 	tags3 := mention.GetTags('#', strings.NewReader(message3))
 	content := mention.GetTags('*', strings.NewReader(message3))
 	fmt.Println("tag:", tags3)
-	fmt.Println("body:", content)
+	fmt.Println("bo dy:", content)
 }
 
 func TestStringWebLink(t *testing.T) {
@@ -124,4 +124,36 @@ func TestScrapeURL(t *testing.T) {
 	t.Log("Description:", resp.Data.Metadata.Description)
 	t.Log("Source URL:", resp.Data.Metadata.SourceURL)
 	t.Log("Content:", resp.Data.Content)
+}
+
+// TestGeminiCompleteScrapeUR with scrappeURL result.
+func TestGeminiCompleteScrapeURL(t *testing.T) {
+	// Load environment variables.
+	fc_token := os.Getenv("FC_AUTH_TOKEN")
+	if fc_token == "" {
+		t.Skip("Skipping test because FC_AUTH_TOKEN is not set")
+	}
+	geminiKey = os.Getenv("GEMINI_API_KEY")
+	// Set geminiKey as global variable
+
+
+	if geminiKey == "" {
+		t.Skip("Skipping test because GEMINI_API_KEY is not set")
+	}
+	
+	// Set up the URL to scrape.
+	url := "https://developers.googleblog.com/en/gemini-15-flash-updates-google-ai-studio-gemini-api/"
+
+	// Call the scrapeURL function.
+	resp, err := scrapeURL(url)
+	if err != nil {
+		t.Error(err)
+	}
+
+	//Promot
+	prompt := "Summary the markdown content and metadata from the URL, and return data as following: 原本通點是什麼？ 本篇文章的創新? 未來發展方向? reply in zh-TW ----"
+
+	// Using Gemini
+	ret := GeminiChatComplete(prompt + "title=" + resp.Data.Metadata.Title + "\n" + resp.Data.Markdown)
+	t.Log("ScapeRet:", ret)
 }
