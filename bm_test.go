@@ -123,7 +123,7 @@ func TestScrapeURL(t *testing.T) {
 	t.Log("Title:", resp.Data.Metadata.Title)
 	t.Log("Description:", resp.Data.Metadata.Description)
 	t.Log("Source URL:", resp.Data.Metadata.SourceURL)
-	t.Log("Content:", resp.Data.Content)
+	t.Log("Markdown:", resp.Data.Markdown)
 }
 
 // TestGeminiCompleteScrapeUR with scrappeURL result.

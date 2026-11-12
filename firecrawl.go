@@ -9,22 +9,29 @@ import (
 	"os"
 )
 
+type FirecrawlRequest struct {
+	URL     string   `json:"url"`
+	Formats []string `json:"formats"`
+}
+
 type FirecrawlResponse struct {
-	Success bool `json:"success"`
+	Success bool   `json:"success"`
+	Error   string `json:"error,omitempty"`
 	Data    struct {
-		Content  string `json:"content"`
 		Markdown string `json:"markdown"`
+		HTML     string `json:"html,omitempty"`
 		Metadata struct {
 			Title       string      `json:"title"`
 			Description string      `json:"description"`
 			Language    interface{} `json:"language"`
 			SourceURL   string      `json:"sourceURL"`
+			StatusCode  int         `json:"statusCode,omitempty"`
 		} `json:"metadata"`
 	} `json:"data"`
 }
 
 func scrapeURL(url string) (*FirecrawlResponse, error) {
-	apiURL := "https://api.firecrawl.dev/v0/scrape"
+	apiURL := "https://api.firecrawl.dev/v2/scrape"
 	authToken := os.Getenv("FC_AUTH_TOKEN")
 
 	if authToken == "" {
@@ -32,7 +39,10 @@ func scrapeURL(url string) (*FirecrawlResponse, error) {
 	}
 
 	// Create the JSON payload
-	payload := map[string]string{"url": url}
+	payload := FirecrawlRequest{
+		URL:     url,
+		Formats: []string{"markdown"},
+	}
 	jsonData, err := json.Marshal(payload)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal JSON: %v", err)
